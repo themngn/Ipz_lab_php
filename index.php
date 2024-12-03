@@ -41,25 +41,38 @@ $result = $conn->query($sql);
             <option value="female" <?php echo $sexFilter == 'female' ? 'selected' : ''; ?>>Female</option>
         </select>
         <button type="submit">Filter</button>
+        <a class="add" href="add.php">Add New Person</a>
     </form>
-
+    
     <table border="1">
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Sex</th>
+            <th>Actions</th>
         </tr>
         <?php
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["id"] . "</td><td>" . $row["name"] . "</td><td>" . $row["sex"] . "</td></tr>";
+                echo "<tr>
+                        <td>" . $row["id"] . "</td>
+                        <td>" . $row["name"] . "</td>
+                        <td>" . $row["sex"] . "</td>
+                        <td>
+                            <form method='POST' action='delete.php' style='display:inline;'>
+                                <input type='hidden' name='id' value='" . $row["id"] . "'>
+                                <button type='submit' onclick=\"return confirm('Are you sure you want to delete this person?')\">Delete</button>
+                            </form>
+                        </td>
+                      </tr>";
             }
         } else {
-            echo "<tr><td colspan='3'>No results found</td></tr>";
+            echo "<tr><td colspan='4'>No results found</td></tr>";
         }
         $conn->close();
         ?>
     </table>
+
 </body>
 </html>
 
